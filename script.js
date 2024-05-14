@@ -64,3 +64,26 @@ function recalculateTotal() {
     totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
     document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
 }
+
+
+// Download PDF
+
+document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 10; // initial vertical position
+    doc.text('Monthly Expenses', 10, y);
+    y += 10;
+
+    expenses.forEach(expense => {
+        doc.text(`${expense.description}: $${expense.amount.toFixed(2)}`, 10, y);
+        y += 10;
+    });
+
+    doc.text(`Total Expenses: $${totalExpenses.toFixed(2)}`, 10, y);
+    
+    doc.save('monthly_expenses.pdf');
+}
