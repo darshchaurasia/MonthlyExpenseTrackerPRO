@@ -127,19 +127,29 @@ function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    let y = 10; // initial vertical position
+    // Get the canvas element and its data URL
+    const canvas = document.getElementById('expenseChart');
+    const canvasImg = canvas.toDataURL('image/png', 1.0);
+
+    let y = 10; // Initial vertical position
+
     doc.text('Monthly Expenses', 10, y);
-    y += 10;
+    y += 10; // Adjust y coordinate to below the title
+
+    // Draw image (Chart) - adjust the dimensions as needed
+    doc.addImage(canvasImg, 'PNG', 10, y, 180, 100);
+    y += 110; // Adjust y coordinate to below the image
 
     expenses.forEach(expense => {
         doc.text(`${expense.description}: $${expense.amount.toFixed(2)}`, 10, y);
-        y += 10;
+        y += 10; // Increment y coordinate for each expense
     });
 
     doc.text(`Total Expenses: $${totalExpenses.toFixed(2)}`, 10, y);
-    
+
     doc.save('monthly_expenses.pdf');
 }
+
 
 // Functions to handle local storage
 function saveExpensesToLocalStorage() {
