@@ -1,136 +1,152 @@
 /* Basic styling reset */
 *, *::before, *::after {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    margin: 20px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 10px;
     background-color: #f9f9f9;
     color: #333;
+    padding: 10px;
 }
 
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+    max-width: 100%;
+    padding: 10px;
+    background: #ffffff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    background: #ffffff;
 }
 
 h1 {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
+    font-size: 1.6rem; /* responsive font size */
     margin-bottom: 20px;
+    text-align: center;
 }
 
 form {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 input[type="text"],
-input[type="number"] {
-    padding: 10px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+input[type="number"],
+button {
+    flex: 1 1 40%; /* Flexibility for mobile */
+    padding: 12px; /* Larger touch targets */
+    font-size: 1rem;
+    margin-top: 10px; /* Space for tapping */
 }
 
 button {
-    padding: 10px 15px;
-    font-size: 16px;
-    color: #fff;
     background-color: #007bff;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
 }
 
+/* Enhance buttons for easier interaction on mobile */
 button:hover {
     background-color: #0056b3;
-}
-
-#expense-list {
-    margin-top: 20px;
 }
 
 #expense-list div {
     background: #eee;
     padding: 10px;
-    margin-bottom: 8px;
+    margin-top: 8px;
     border-left: 5px solid #007bff;
-    transition: background-color 0.2s;
 }
-
-.dark-mode {
-    background-color: #1a1a1a; /* Dark background for the entire body */
-    color: #ccc; /* Light text color suitable for dark background */
-}
-
-.dark-mode .container {
-    background: #333; /* Darker background for containers */
-    color: #ddd; /* Slightly lighter text color for contrast */
-}
-
-.dark-mode input[type="text"],
-.dark-mode input[type="number"],
-.dark-mode button {
-    background: #555; /* Darker background for form elements */
-    color: #ddd; /* Light text color */
-    border-color: #777; /* Dark border color */
-}
-
-.dark-mode #expense-list div {
-    background: #424242; /* Dark background for list items */
-    border-color: #007bff; /* Blue left border for some pop of color */
-}
-
-.dark-mode button:hover {
-    background-color: #333; /* Darker background on hover for buttons */
-}
-
-/* Ensuring headers are visible in dark mode */
-.dark-mode h1 {
-    color: #e9ecef; /* Bright color for headers */
-}
-
 
 .chart-container {
     width: 100%;
-    height: auto;
     margin-top: 20px;
 }
 
-/* Toggle and download button specific styling */
-#toggle-dark-mode, #download-pdf {
-    width: 100%;
-    margin-top: 10px;
-    transition: background-color 0.3s ease-in-out;
+/* Media Queries for Responsive Adjustments */
+@media (max-width: 768px) {
+    input[type="text"],
+    input[type="number"],
+    button {
+        flex: 1 1 100%; /* Make full width on smaller screens */
+    }
+
+    h1 {
+        font-size: 1.4rem; /* Slightly smaller font size on mobile */
+    }
 }
 
-#toggle-dark-mode {
-    background-color: #4CAF50;
+.dark-mode {
+    background-color: #1a1a1a;
+    color: #ccc;
 }
 
-#toggle-dark-mode:hover {
-    background-color: #45a049;
+.dark-mode .container {
+    background: #333;
+    color: #ddd;
 }
 
-#download-pdf {
-    background-color: #f44336;
+.dark-mode input,
+.dark-mode button,
+.dark-mode #expense-list div {
+    background: #555;
+    color: #ddd;
+    border-color: #777;
 }
 
-#download-pdf:hover {
-    background-color: #da190b;
+.dark-mode button:hover {
+    background-color: #333;
+}
+
+.dark-mode .contact-container {
+    background: #333; /* Dark background for the contact container */
+    color: #ddd; /* Light text for readability */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* Darker shadow for depth perception */
+}
+
+.dark-mode .contact-container h2,
+.dark-mode .contact-container p {
+    color: #ccc; /* Consistent light text color for headings and paragraphs */
+}
+
+.dark-mode .contact-container a {
+    color: #4ea1d3; /* Brighter link color for better visibility */
+}
+
+.dark-mode .contact-container a:hover {
+    color: #77c1f1; /* Lighter hover color for links */
+}
+
+
+.contact-container {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.contact-container h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.contact-container p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.contact-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact-container a:hover {
+    text-decoration: underline;
 }

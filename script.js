@@ -2,9 +2,10 @@ let expenses = [];
 let totalExpenses = 0;
 let expenseChart; // This will hold the chart instance
 
+// Event listener for form submission
 document.getElementById('expense-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const description = document.getElementById('description').value;
     const amount = parseFloat(document.getElementById('amount').value);
     if (!isNaN(amount)) {
@@ -21,20 +22,26 @@ document.getElementById('expense-form').addEventListener('submit', function(e) {
     document.getElementById('amount').value = '';
 });
 
+// Function to add a new expense to the list
 function addExpenseToList(expense) {
     const node = document.createElement("div");
     node.setAttribute("id", expense.id);
-    node.innerHTML = `${expense.description}: $${expense.amount.toFixed(2)} 
+    node.classList.add('expense-item'); // This class should handle specific styling
+    node.innerHTML = `${expense.description}: $${expense.amount.toFixed(2)}
                        <button onclick="editExpense(${expense.id})">Edit</button>
                        <button onclick="deleteExpense(${expense.id})">Delete</button>`;
     document.getElementById('expense-list').appendChild(node);
+
+    applyThemeToNewElement(node); // Ensure new element adheres to current theme
 }
 
+// Function to update the total displayed
 function updateTotal() {
     totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
     document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
 }
 
+// Function to delete an expense
 function deleteExpense(id) {
     const expense = expenses.find(expense => expense.id === id);
     const index = expenses.indexOf(expense);
@@ -46,6 +53,7 @@ function deleteExpense(id) {
     saveExpensesToLocalStorage();
 }
 
+// Function to edit an existing expense
 function editExpense(id) {
     const expense = expenses.find(expense => expense.id === id);
     const description = prompt("Edit the description", expense.description);
@@ -61,6 +69,7 @@ function editExpense(id) {
     }
 }
 
+// Function to update the display of an edited expense
 function updateExpenseDisplay(expense) {
     const element = document.getElementById(expense.id);
     element.innerHTML = `${expense.description}: $${expense.amount.toFixed(2)} 
@@ -68,6 +77,7 @@ function updateExpenseDisplay(expense) {
                          <button onclick="deleteExpense(${expense.id})">Delete</button>`;
 }
 
+// Function to create or update the expense chart
 function createExpenseChart() {
     const ctx = document.getElementById('expenseChart').getContext('2d');
     if (expenseChart) {
@@ -97,14 +107,20 @@ function createExpenseChart() {
     });
 }
 
+// Function to toggle dark mode across all relevant elements
 document.getElementById('toggle-dark-mode').addEventListener('click', function() {
     document.body.classList.toggle('dark-mode');
-    document.querySelectorAll('input, button, #expense-list div, .chart-container').forEach(function(el) {
-        el.classList.toggle('dark-mode');
+
+    // Update all dynamic elements to reflect the current theme
+    const elementsToUpdate = document.querySelectorAll('.expense-item, input, button, .chart-container');
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', document.body.classList.contains('dark-mode'));
     });
-    createExpenseChart(); // Re-create the chart to apply dark mode styles
+
+    createExpenseChart(); // Update the chart to reflect the theme change
 });
 
+// Function to download the expense list as a PDF
 document.getElementById('download-pdf').addEventListener('click', downloadPDF);
 
 function downloadPDF() {
@@ -125,6 +141,7 @@ function downloadPDF() {
     doc.save('monthly_expenses.pdf');
 }
 
+// Functions to handle local storage
 function saveExpensesToLocalStorage() {
     localStorage.setItem('expenses', JSON.stringify(expenses));
 }
@@ -143,3 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadExpensesFromLocalStorage();
     createExpenseChart();
 });
+
+function applyThemeToNewElement(element) {
+    element.classList.toggle('dark-mode', document.body.classList.contains('dark-mode'));
+}
