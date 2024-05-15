@@ -1,45 +1,136 @@
+/* Basic styling reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
 .container {
-    width: 80%;
+    max-width: 900px;
     margin: auto;
     padding: 20px;
-    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background: #ffffff;
 }
 
-input, button {
-    margin: 10px;
+h1 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="number"] {
     padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
 }
 
 button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 #expense-list {
     margin-top: 20px;
-    text-align: left;
 }
 
-body.dark-mode {
-    background-color: #333;
-    color: #f1f1f1;
+#expense-list div {
+    background: #eee;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-left: 5px solid #007bff;
+    transition: background-color 0.2s;
 }
 
-input.dark-mode, button.dark-mode {
-    background-color: #555;
-    color: #fff;
-    border: 1px solid #ccc;
+.dark-mode {
+    background-color: #1a1a1a; /* Dark background for the entire body */
+    color: #ccc; /* Light text color suitable for dark background */
+}
+
+.dark-mode .container {
+    background: #333; /* Darker background for containers */
+    color: #ddd; /* Slightly lighter text color for contrast */
+}
+
+.dark-mode input[type="text"],
+.dark-mode input[type="number"],
+.dark-mode button {
+    background: #555; /* Darker background for form elements */
+    color: #ddd; /* Light text color */
+    border-color: #777; /* Dark border color */
 }
 
 .dark-mode #expense-list div {
-    background-color: #444;
-    color: #fff;
+    background: #424242; /* Dark background for list items */
+    border-color: #007bff; /* Blue left border for some pop of color */
 }
 
-.chart-container.dark-mode {
-    background-color: #222;
+.dark-mode button:hover {
+    background-color: #333; /* Darker background on hover for buttons */
+}
+
+/* Ensuring headers are visible in dark mode */
+.dark-mode h1 {
+    color: #e9ecef; /* Bright color for headers */
+}
+
+
+.chart-container {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+/* Toggle and download button specific styling */
+#toggle-dark-mode, #download-pdf {
+    width: 100%;
+    margin-top: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#toggle-dark-mode {
+    background-color: #4CAF50;
+}
+
+#toggle-dark-mode:hover {
+    background-color: #45a049;
+}
+
+#download-pdf {
+    background-color: #f44336;
+}
+
+#download-pdf:hover {
+    background-color: #da190b;
 }
