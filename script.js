@@ -1,79 +1,89 @@
-import { db, addDoc, collection, getDocs, deleteDoc, doc } from './firebaseConfig.js';
-
+let expenses = [];
 let totalExpenses = 0;
 
-document.getElementById('expense-form').addEventListener('submit', async function(e) {
+document.getElementById('expense-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const description = document.getElementById('description').value;
     const amount = parseFloat(document.getElementById('amount').value);
-
-    // Add the expense to Firestore
-    try {
-        const docRef = await addDoc(collection(db, "expenses"), {
-            description: description,
-            amount: amount,
-            timestamp: new Date()
-        });
-        console.log("Document written with ID: ", docRef.id);
-        displayExpenses();
-    } catch (error) {
-        console.error("Error adding document: ", error);
-    }
+    const expense = { id: Date.now(), description, amount };
+    expenses.push(expense);
+    
+    addExpenseToList(expense);
+    updateTotal(amount);
     
     document.getElementById('description').value = '';
     document.getElementById('amount').value = '';
 });
 
-async function displayExpenses() {
-    const querySnapshot = await getDocs(collection(db, "expenses"));
-    const expensesContainer = document.getElementById('expense-list');
-    expensesContainer.innerHTML = ''; // Clear existing entries
-    totalExpenses = 0; // Reset total expenses
-    
-    querySnapshot.forEach((doc) => {
-        const expense = doc.data();
-        expense.id = doc.id;
-        addExpenseToList(expense);
-        totalExpenses += expense.amount;
-    });
-    
-    document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
-}
-
 function addExpenseToList(expense) {
     const node = document.createElement("div");
     node.setAttribute("id", expense.id);
     node.innerHTML = `${expense.description}: $${expense.amount.toFixed(2)} 
-                       <button onclick="deleteExpense('${expense.id}')">Delete</button>`;
+                       <button onclick="editExpense(${expense.id})">Edit</button>
+                       <button onclick="deleteExpense(${expense.id})">Delete</button>`;
     document.getElementById('expense-list').appendChild(node);
 }
 
-async function deleteExpense(id) {
-    await deleteDoc(doc(db, "expenses", id));
-    console.log("Document successfully deleted!");
-    displayExpenses();
+function updateTotal(amount) {
+    totalExpenses += amount;
+    document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
 }
 
-document.getElementById('download-pdf').addEventListener('click', async function() {
-    const { jsPDF } = window.jspdf;
-    const pdfDoc = new jsPDF();
-    const querySnapshot = await getDocs(collection(db, "expenses"));
+function deleteExpense(id) {
+    const expense = expenses.find(expense => expense.id === id);
+    const index = expenses.indexOf(expense);
+    expenses.splice(index, 1);
+    updateTotal(-expense.amount);
     
-    let y = 20; // initial vertical position
-    pdfDoc.setFontSize(14);
-    pdfDoc.text('Monthly Expenses', 10, y);
+    const element = document.getElementById(id);
+    document.getElementById('expense-list').removeChild(element);
+}
+
+function editExpense(id) {
+    const expense = expenses.find(expense => expense.id === id);
+    const description = prompt("Edit the description", expense.description);
+    const amount = parseFloat(prompt("Edit the amount", expense.amount));
+    
+    if (description !== null && !isNaN(amount)) {
+        expense.description = description;
+        expense.amount = amount;
+        updateExpenseDisplay(expense);
+        recalculateTotal();
+    }
+}
+
+function updateExpenseDisplay(expense) {
+    const element = document.getElementById(expense.id);
+    element.innerHTML = `${expense.description}: $${expense.amount.toFixed(2)} 
+                         <button onclick="editExpense(${expense.id})">Edit</button>
+                         <button onclick="deleteExpense(${expense.id})">Delete</button>`;
+}
+
+function recalculateTotal() {
+    totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+    document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
+}
+
+
+// Download PDF
+
+document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+
+function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 10; // initial vertical position
+    doc.text('Monthly Expenses', 10, y);
     y += 10;
 
-    let totalExpenses = 0;
-    querySnapshot.forEach((docSnapshot) => {
-        const expense = docSnapshot.data();
-        pdfDoc.text(`${expense.description}: $${expense.amount.toFixed(2)}`, 10, y);
+    expenses.forEach(expense => {
+        doc.text(`${expense.description}: $${expense.amount.toFixed(2)}`, 10, y);
         y += 10;
-        totalExpenses += expense.amount;
     });
 
-    pdfDoc.text(`Total Expenses: $${totalExpenses.toFixed(2)}`, 10, y);
-    pdfDoc.save('monthly_expenses.pdf');
-});
-
+    doc.text(`Total Expenses: $${totalExpenses.toFixed(2)}`, 10, y);
+    
+    doc.save('monthly_expenses.pdf');
+}
