@@ -7,12 +7,15 @@ document.getElementById('expense-form').addEventListener('submit', function(e) {
     
     const description = document.getElementById('description').value;
     const amount = parseFloat(document.getElementById('amount').value);
-    const expense = { id: Date.now(), description, amount };
-    expenses.push(expense);
-    
-    addExpenseToList(expense);
-    updateTotal();
-    createExpenseChart();
+    if (!isNaN(amount)) {
+        const expense = { id: Date.now(), description, amount };
+        expenses.push(expense);
+        
+        addExpenseToList(expense);
+        updateTotal();
+        createExpenseChart();
+        saveExpensesToLocalStorage();
+    }
     
     document.getElementById('description').value = '';
     document.getElementById('amount').value = '';
@@ -37,16 +40,15 @@ function deleteExpense(id) {
     const index = expenses.indexOf(expense);
     expenses.splice(index, 1);
     updateTotal();
-    
     const element = document.getElementById(id);
     document.getElementById('expense-list').removeChild(element);
     createExpenseChart();
+    saveExpensesToLocalStorage();
 }
 
 function editExpense(id) {
     const expense = expenses.find(expense => expense.id === id);
     const description = prompt("Edit the description", expense.description);
-    const oldAmount = expense.amount;
     const newAmount = parseFloat(prompt("Edit the amount", expense.amount));
     
     if (description !== null && !isNaN(newAmount)) {
@@ -55,6 +57,7 @@ function editExpense(id) {
         updateExpenseDisplay(expense);
         updateTotal();
         createExpenseChart();
+        saveExpensesToLocalStorage();
     }
 }
 
@@ -71,28 +74,14 @@ function createExpenseChart() {
         expenseChart.destroy(); // Destroy the existing chart instance if exists
     }
     expenseChart = new Chart(ctx, {
-        type: 'bar', // Can change to 'line', 'pie', etc.
+        type: 'bar',
         data: {
             labels: expenses.map(expense => expense.description),
             datasets: [{
                 label: 'Expenses',
                 data: expenses.map(expense => expense.amount),
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             }]
         },
@@ -108,7 +97,14 @@ function createExpenseChart() {
     });
 }
 
-// Download PDF function
+document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    document.querySelectorAll('input, button, #expense-list div, .chart-container').forEach(function(el) {
+        el.classList.toggle('dark-mode');
+    });
+    createExpenseChart(); // Re-create the chart to apply dark mode styles
+});
+
 document.getElementById('download-pdf').addEventListener('click', downloadPDF);
 
 function downloadPDF() {
@@ -129,17 +125,21 @@ function downloadPDF() {
     doc.save('monthly_expenses.pdf');
 }
 
-// Toggle Dark Mode function
-document.getElementById('toggle-dark-mode').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
-    document.querySelectorAll('input, button, #expense-list div, .chart-container').forEach(function(el) {
-        el.classList.toggle('dark-mode');
-    });
-    // Re-create the chart to apply dark mode styles if needed
-    createExpenseChart();
-});
+function saveExpensesToLocalStorage() {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+}
 
-// Loads Graph since the beginning 
+function loadExpensesFromLocalStorage() {
+    const storedExpenses = localStorage.getItem('expenses');
+    if (storedExpenses) {
+        expenses = JSON.parse(storedExpenses);
+        expenses.forEach(expense => addExpenseToList(expense));
+        updateTotal();
+        createExpenseChart();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    createExpenseChart(); // Initialize the chart on page load
+    loadExpensesFromLocalStorage();
+    createExpenseChart();
 });
