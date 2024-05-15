@@ -128,3 +128,18 @@ function downloadPDF() {
     
     doc.save('monthly_expenses.pdf');
 }
+
+// Toggle Dark Mode function
+document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    document.querySelectorAll('input, button, #expense-list div, .chart-container').forEach(function(el) {
+        el.classList.toggle('dark-mode');
+    });
+    // Re-create the chart to apply dark mode styles if needed
+    createExpenseChart();
+});
+
+// Loads Graph since the beginning 
+document.addEventListener('DOMContentLoaded', function() {
+    createExpenseChart(); // Initialize the chart on page load
+});

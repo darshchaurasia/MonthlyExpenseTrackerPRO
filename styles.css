@@ -23,3 +23,23 @@ button {
     margin-top: 20px;
     text-align: left;
 }
+
+body.dark-mode {
+    background-color: #333;
+    color: #f1f1f1;
+}
+
+input.dark-mode, button.dark-mode {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #ccc;
+}
+
+.dark-mode #expense-list div {
+    background-color: #444;
+    color: #fff;
+}
+
+.chart-container.dark-mode {
+    background-color: #222;
+}
