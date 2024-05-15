@@ -1,4 +1,4 @@
-# Modern Expense Tracker
+# Expense Tracker
 
 Welcome to the Modern Expense Tracker, an innovative web application designed to simplify personal finance management. This tool allows users to track and visualize their expenses dynamically, offering insights into spending patterns with ease and precision.
 
