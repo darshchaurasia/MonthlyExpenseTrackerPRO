@@ -9,6 +9,7 @@ Welcome to the Modern Expense Tracker, an innovative web application designed to
 - **Dark Mode**: Toggle between light and dark themes to suit your viewing preference, perfect for different lighting conditions.
 - **Persistence with Local Storage**: Expenses are saved locally in your browser, ensuring no data loss even when you close your browser.
 - **PDF Export**: Generate and download a PDF report of your expenses with just one click.
+- **CSV Export**: Generate and download a CSV report of your expenses with just one click.
 - **Responsive Design**: Fully responsive, ensuring a seamless experience on desktops, tablets, and mobile devices.
 
 ## Prototype
