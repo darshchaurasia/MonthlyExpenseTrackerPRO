@@ -175,7 +175,7 @@ function applyThemeToNewElement(element) {
     element.classList.toggle('dark-mode', document.body.classList.contains('dark-mode'));
 }
 
-
+// Function to download the expense list as a CSV
 document.getElementById('download-csv').addEventListener('click', function() {
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Description,Amount\n"; // Column headers
