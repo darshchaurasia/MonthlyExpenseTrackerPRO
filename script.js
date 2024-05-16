@@ -174,3 +174,26 @@ document.addEventListener('DOMContentLoaded', function() {
 function applyThemeToNewElement(element) {
     element.classList.toggle('dark-mode', document.body.classList.contains('dark-mode'));
 }
+
+
+document.getElementById('download-csv').addEventListener('click', function() {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Description,Amount\n"; // Column headers
+
+    expenses.forEach(expense => {
+        let row = `${expense.description},${expense.amount}`;
+        csvContent += row + "\n";
+    });
+
+    // Add a formula to calculate the total at the bottom of the CSV
+    csvContent += "Total,=SUM(B2:B" + (expenses.length + 1) + ")\n";
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link); // Required for Firefox
+
+    link.click();
+    document.body.removeChild(link);
+});
