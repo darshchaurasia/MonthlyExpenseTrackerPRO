@@ -65,4 +65,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Darsh Chaurasia - darshchaurasia@gmail.com - [Website](https://darshchaurasia.com)
 
-Project Link: [https://github.com/yourusername/modern-expense-tracker](https://github.com/yourusername/modern-expense-tracker)](https://github.com/darshchaurasia/MonthlyExpenseTrackerPRO/)
+Project Link: [[https://github.com/yourusername/modern-expense-tracker](https://github.com/yourusername/modern-expense-tracker)](https://github.com/darshchaurasia/MonthlyExpenseTrackerPRO/)
